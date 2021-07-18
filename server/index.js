@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const port = 3042;
-
+const SHA256 = require('crypto-js/sha256');
 
 
 // localhost can have cross origin errors
@@ -36,8 +36,8 @@ for (let i = 0; i < START_ACCOUNTS; i++) {
   console.log(`Address : ${address}`);
   console.log(`Private Key : ${privateKey}`);
 
-  // sets a random balance between 50 & 100
-  const balance = Math.floor((Math.random() * 50) + 50);
+  // sets a random balance between 50 & 75
+  const balance = Math.floor((Math.random() * 50) + 25);
   balances[address] = balance;
   console.log(`Balance : ${balance}`);
 
@@ -55,10 +55,29 @@ app.get('/balance/:address', (req, res) => {
 });
 
 app.post('/send', (req, res) => {
-  const {sender, recipient, amount} = req.body;
+  const {sender, recipient, amount, signatureR, signatureS} = req.body;
+//   balances[sender] -= amount;
+//   balances[recipient] = (balances[recipient] || 0) + +amount;
+//   res.send({ balance: balances[sender] });
+// });
+
+// verify
+const key = ec.keyFromPublic(sender, 'hex');
+const msg = `${amount} - ${recipient}`;
+const msgHash = SHA256(msg).toString();
+
+const signature = {
+  r: signatureR,
+  s: signatureS
+};
+
+if(key.verify(msgHash, signature)) {
   balances[sender] -= amount;
   balances[recipient] = (balances[recipient] || 0) + +amount;
-  res.send({ balance: balances[sender] });
+}
+
+res.send({ balance: balances[sender] });
+
 });
 
 app.listen(port, () => {
