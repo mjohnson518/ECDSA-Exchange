@@ -55,15 +55,15 @@ app.get('/balance/:address', (req, res) => {
 });
 
 app.post('/send', (req, res) => {
-  const {sender, signature, recipient, amount} = req.body
-  // const key1 = ec.keyFromPublic(sender, 'hex');
-  const key1 = ec.keyFromPrivate(sender);
-  const msg = amount;
-  const msgHash = SHA256(msg);
-    if (key1.verify(msgHash.toString(), signature)) {
-      balances[sender] -= amount;
-      balances[recipient] = (balances[recipient] || 0) + +amount;
-    }
+  const {sender, signature, recipient, amount, recid} = req.body
+  const message = {amount: amount}
+  const msgHash = SHA256(message).words;
+  const publicKey = ec.recoverPubKey(msgHash, signature, recid);
+  const key1 = ec.keyFromPublic(publicKey);
+  if (('0x' + publicKey.encode("hex").slice(-40)) === sender) {
+    balances[sender] -= amount;
+    balances[recipient] = (balances[recipient] || 0) + +amount;
+  }
   res.send({ balance: balances[sender] });
 });
 
