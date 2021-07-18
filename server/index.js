@@ -56,7 +56,10 @@ app.get('/balance/:address', (req, res) => {
 
 app.post('/send', (req, res) => {
   const {sender, signature, recipient, amount} = req.body
-  const key1 = ec.keyFromPublic(sender, 'hex');
+  // const key1 = ec.keyFromPublic(sender, 'hex');
+  const key1 = ec.keyFromPrivate(sender);
+  const msg = amount;
+  const msgHash = SHA256(msg);
     if (key1.verify(msgHash.toString(), signature)) {
       balances[sender] -= amount;
       balances[recipient] = (balances[recipient] || 0) + +amount;

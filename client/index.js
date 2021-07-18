@@ -26,7 +26,7 @@ document.getElementById("transfer-amount").addEventListener('click', () => {
 
   //SIGN
   const ec = new EC('secp256k1');
-  const key = ec.keyFromPrivate(senderPrivatekey);
+  const key = ec.keyFromPrivate(sender);
   const message = {amount: amount}
   const msgHash = SHA256(message);
   const signature = key.sign(msgHash.toString());
