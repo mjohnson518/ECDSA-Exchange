@@ -2,8 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const port = 3042;
-const EC = require('elliptic').ec;
-const ec = new EC('secp256k1');
+
 
 
 // localhost can have cross origin errors
@@ -23,6 +22,8 @@ const balances = {}; //replaces #1
 const Ledger = require('./ledger');
 const ledger = new Ledger();
 
+const EC = require('elliptic').ec;
+const ec = new EC('secp256k1');
 
 console.log('==================');
 console.log('AVAILABLE ACCOUNTS');
