@@ -7,6 +7,7 @@ input {
   padding: 9px 25px;
   border-radius: 5px;
   text-transform: uppercase;
+  margin-top: 15px;
 }
 
 #balance {
@@ -30,6 +31,7 @@ input {
     text-align: center;
     border-radius: 10px;
 
+
     h1 {
         margin: 0 0 20px;
     }
@@ -46,6 +48,7 @@ input {
   font-size: 0.7em;
   letter-spacing: 0.7px;
   background-color: #f58427;
+  margin-top: 20px;
 
   &:hover {
     cursor: pointer;
